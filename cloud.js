@@ -25,7 +25,7 @@ function validate(entries) {
   return entries.map(e => {
     if (!e || typeof e.id !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(e.date)) throw Error('Folha inválida.');
     return { id:e.id, title:String(e.title || ''), date:e.date, html:clean(String(e.html || '')),
-      theme:['cream','lilac','peach','dots'].includes(e.theme) ? e.theme : 'cream' };
+      theme:['cream','lilac','peach','dots','grid','gingham','sage','sky','floral','wash','kraft','rose'].includes(e.theme) ? e.theme : 'cream' };
   });
 }
 function lock() {
