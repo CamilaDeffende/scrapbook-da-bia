@@ -4,7 +4,7 @@ Scrapbook pessoal com login por e-mail e senha, fontes, cores, adesivos, fotos e
 
 ## Uso
 
-Publique os arquivos em uma hospedagem estática HTTPS ou abra index.html no navegador com acesso à internet. Entre com a conta autorizada criada no Supabase Auth. A senha nunca fica no código. O login deve ser repetido ao recarregar a página.
+Publique os arquivos em uma hospedagem estática HTTPS ou abra index.html no navegador com acesso à internet. Entre com a conta autorizada criada no Supabase Auth. A senha nunca fica no código. O login é lembrado neste navegador, com renovação automática da sessão. Ao reabrir, o usuário e a autorização são validados novamente antes de mostrar as memórias. Use Sair da minha conta para encerrar o acesso no navegador.
 
 ## Salvamento e privacidade
 
