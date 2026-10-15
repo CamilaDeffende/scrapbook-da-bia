@@ -24,3 +24,7 @@ index.html e app.js: interface e editor. cloud.js: login e sincronização. conf
 ## Validação
 
 Testes no banco confirmaram leitura/gravação da conta autorizada, bloqueio de outras contas e anônimos, e rejeição de revisão desatualizada. As gravações de teste foram revertidas. Testes simulados do cliente cobriram falta de configuração, login inválido, conta não autorizada, falha de leitura e conta autorizada. O login completo com a senha da Bia ainda requer teste pelo usuário.
+
+## Desenvolvimento v2
+
+Abra preview.html para avaliar molduras e cartas com dados fictícios. A prévia não usa o Supabase e descarta as alterações ao fechar/recarregar. O login da v2 fica desabilitado até configurar uma base de desenvolvimento separada. Consulte docs/PLANO-V2.md antes de abrir o PR. Não substitua a configuração de produção pela configuração vazia desta branch.
