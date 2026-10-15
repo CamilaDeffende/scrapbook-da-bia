@@ -9,7 +9,7 @@ const clean = html => { const safe=DOMPurify.sanitize(html, {
     for(const key of ['color','font-family','font-size','font-weight','font-style','text-decoration','text-align'])if(original.getPropertyValue(key))allowed[key]=original.getPropertyValue(key);
     node.removeAttribute('style');for(const [key,value] of Object.entries(allowed))node.style.setProperty(key,value);
   });template.content.querySelectorAll('[class]').forEach(node=>{
-    const allowedClasses=node.tagName==='IMG'?['photo-frame-none','photo-frame-polaroid','photo-frame-rose','photo-frame-vintage','photo-frame-lace']:node.tagName==='DETAILS'?['memory-letter']:node.tagName==='DIV'?['letter-body']:node.tagName==='BUTTON'?['edit-letter']:[];
+    const allowedClasses=node.tagName==='IMG'?['photo-frame-none','photo-frame-polaroid','photo-frame-rose','photo-frame-vintage','photo-frame-lace']:node.tagName==='DETAILS'?['memory-letter']:node.tagName==='DIV'?['letter-body']:node.tagName==='BUTTON'?['edit-letter','remove-letter']:node.tagName==='SPAN'?['letter-title','letter-seal']:[];
     node.className=Array.from(node.classList).filter(c=>allowedClasses.includes(c)).join(' ');
   });
   template.content.querySelectorAll('[contenteditable]').forEach(node=>{if(node.matches('details.memory-letter'))node.setAttribute('contenteditable','false');else node.removeAttribute('contenteditable');});
