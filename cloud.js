@@ -46,7 +46,7 @@ async function flush() {
 }
 async function enter() {
   const { data:{user:verified}, error } = await client.auth.getUser();
-  if (error || !verified) return;
+  if (error || !verified) {message.textContent='Não foi possível validar sua sessão. Verifique a conexão ou entre novamente.';return;}
   const allowed = await client.from('scrapbook_owner').select('user_id').eq('user_id', verified.id).maybeSingle();
   if (allowed.error || !allowed.data) {
     await client.auth.signOut();
@@ -91,6 +91,19 @@ if (!config?.url || !config?.publishableKey || !window.supabase || !window.DOMPu
   message.textContent='O scrapbook está sendo preparado. A conexão segura ainda não foi configurada.';
   form.querySelector('button').disabled=true;
 } else {
-  client=supabase.createClient(config.url,config.publishableKey,{auth:{persistSession:false,detectSessionInUrl:false}});
-  client.auth.onAuthStateChange(event=>{if(event==='SIGNED_OUT'){lock();pending=null;user=null;}});
+  client=supabase.createClient(config.url,config.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
+  client.auth.onAuthStateChange(event=>{if(event==='SIGNED_OUT'){const wasOpen=appLoaded;lock();clearTimeout(saveTimer);pending=null;user=null;if(wasOpen)location.reload();}});
+  // A sessão lembrada só abre as folhas após validar o usuário e a autorização no banco.
+  async function restoreLogin() {
+    const button=form.querySelector('button');
+    button.disabled=true;message.textContent='Abrindo seu cantinho…';
+    try {
+      const {data,error}=await client.auth.getSession();
+      if(error) {message.textContent='Sua sessão terminou. Entre novamente para continuar.';return;}
+      if(data.session) await enter();
+      else message.textContent='';
+    } catch {message.textContent='Não foi possível recuperar o acesso. Verifique a conexão ou entre novamente.';}
+    finally {button.disabled=false;}
+  }
+  restoreLogin();
 }
