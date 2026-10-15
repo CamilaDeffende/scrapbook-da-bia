@@ -3,8 +3,8 @@ const message = document.querySelector('#loginMessage');
 const form = document.querySelector('#loginForm');
 let client, user, revision = 0, pending = null, running = false, conflict = false, appLoaded = false, saveTimer;
 const clean = html => { const safe=DOMPurify.sanitize(html, {
-  ALLOWED_TAGS: ['p','br','div','span','b','strong','i','em','u','s','font','img','ul','ol','li'],
-  ALLOWED_ATTR: ['style','face','size','color','src','alt'],
+  ALLOWED_TAGS: ['p','br','div','span','b','strong','i','em','u','s','font','img','ul','ol','li','details','summary','button'],
+  ALLOWED_ATTR: ['style','face','size','color','src','alt','class','contenteditable','type'],
   ALLOW_DATA_ATTR: false
 });const template=document.createElement('template');template.innerHTML=safe;
   template.content.querySelectorAll('img').forEach(img=>{if(!/^data:image\/(jpeg|png|webp);base64,/i.test(img.getAttribute('src')||''))img.remove();});
@@ -12,7 +12,13 @@ const clean = html => { const safe=DOMPurify.sanitize(html, {
     const original=node.style;const allowed={};
     for(const key of ['color','font-family','font-size','font-weight','font-style','text-decoration','text-align'])if(original.getPropertyValue(key))allowed[key]=original.getPropertyValue(key);
     node.removeAttribute('style');for(const [key,value] of Object.entries(allowed))node.style.setProperty(key,value);
-  });return template.innerHTML;
+  });template.content.querySelectorAll('[class]').forEach(node=>{
+    const allowedClasses=node.tagName==='IMG'?['photo-frame-none','photo-frame-polaroid','photo-frame-rose','photo-frame-vintage','photo-frame-lace']:node.tagName==='DETAILS'?['memory-letter']:node.tagName==='DIV'?['letter-body']:node.tagName==='BUTTON'?['edit-letter']:[];
+    node.className=Array.from(node.classList).filter(c=>allowedClasses.includes(c)).join(' ');
+  });
+  template.content.querySelectorAll('[contenteditable]').forEach(node=>{if(node.matches('details.memory-letter'))node.setAttribute('contenteditable','false');else node.removeAttribute('contenteditable');});
+  template.content.querySelectorAll('button').forEach(node=>{node.type='button';});
+  return template.innerHTML;
 };
 function validate(entries) {
   if (!Array.isArray(entries)) throw Error('Memórias inválidas.');
@@ -60,6 +66,7 @@ async function enter() {
   window.biaCloud = { entries, clean, save(value) { pending = validate(structuredClone(value)); state('Salvando suas memórias…'); clearTimeout(saveTimer);saveTimer=setTimeout(flush,600); } };
   if (!appLoaded) {
     await new Promise((resolve,reject) => { const script=document.createElement('script');script.src='app.js';script.onload=resolve;script.onerror=reject;document.body.append(script); });
+    await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='v2.js';script.onload=resolve;script.onerror=reject;document.body.append(script);});
     appLoaded=true;
   }
   document.querySelector('#loginPage').hidden=true;

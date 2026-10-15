@@ -1,18 +1,19 @@
 # Próxima versão do ScrapBook da Bia
 
-Status: planejamento. Funcionalidades ainda não implementadas.
+Status: primeira implementação pronta para avaliação visual. Não publicada em produção.
 
-## Funcionalidades previstas
+## Implementado
 
-- Mais opções de moldura para fotos, com seleção de estilo e preservação nas memórias salvas.
-- Carta interativa: um envelope/box que guarda texto e abre ao passar o mouse para leitura. Também deve abrir por toque em dispositivos móveis e por teclado, sem depender apenas do hover.
+- Cinco molduras: polaroid, rosa, vintage, rendinha e sem moldura. Clique em uma foto para mudar o estilo. Novas fotos usam a opção selecionada.
+- Envelope com título e texto, criado e editado por diálogo. Abre ao passar o mouse e também por clique, toque e teclado.
+- Sanitização permite apenas as marcações e classes necessárias às molduras/cartas. Estado de hover e seleção não é salvo.
+- Prévia independente em preview.html, com dados fictícios em memória, sem Supabase e sem salvamento permanente.
 
-## Fluxo de desenvolvimento
+## Antes do PR para produção
 
-- Desenvolver nesta branch `v2`.
-- Manter `main` como versão publicada no GitHub Pages.
-- Configurar uma prévia separada antes de testes visuais.
-- Usar ambiente Supabase de desenvolvimento isolado; não testar gravações na base real da Bia. A configuração copiada da main ainda aponta para produção e deve ser substituída no ambiente de testes antes de utilizá-lo.
-- Manter compatibilidade com as folhas e fotos existentes.
-- Validar salvamento, autenticação, autorização, navegação e uso no celular.
-- Abrir PR de `v2` para `main` quando as mudanças estiverem implementadas e testadas; revisar antes de incorporar e publicar.
+- Avaliar layout, molduras, fotos e cartas na prévia, no computador e no celular.
+- Configurar Supabase de desenvolvimento em config.js. A branch v2 não contém o endereço ou chave do projeto real.
+- Aplicar schema.sql uma única vez na base de desenvolvimento e criar uma conta de testes autorizada.
+- Testar salvamento e reabertura de fotos, molduras e cartas; validar login e acesso negado a outra conta.
+- Reconciliar config.js para implantação antes de incorporar: a configuração vazia de desenvolvimento não deve substituir a configuração de produção.
+- Abrir PR de v2 para main após as verificações. main e GitHub Pages continuam sendo a versão entregue à Bia.
